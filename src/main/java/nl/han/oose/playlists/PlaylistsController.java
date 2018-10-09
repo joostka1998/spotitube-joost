@@ -44,7 +44,7 @@ public class PlaylistsController {
         }
     }
 
-    @Path("{id}")
+    @Path("{id}/tracks")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response getPlaylist(@PathParam("id") final String id, @QueryParam("token") String token) {
@@ -64,13 +64,4 @@ public class PlaylistsController {
         }
     }
 
-    /*
-    @POST
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    public List<Playlist> addPlaylist(Playlist playlist) {
-        playlists.add(playlist);
-        return playlists;
-    }
-    */
 }
