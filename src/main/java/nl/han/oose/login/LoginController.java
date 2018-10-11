@@ -14,7 +14,6 @@ public class LoginController {
     @Inject
     private LoginService loginService;
 
-
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
