@@ -26,16 +26,11 @@ public class PlaylistsController {
     @Produces(MediaType.APPLICATION_JSON)
     public Response getPlaylist(@PathParam("id") final String id, @QueryParam("token") String token) {
         if (token.equals("1234-1234-1234")) {
-            for (Playlist p : playlistService.returnPlaylists()) {
-                try {
-                    if (p.getId() == Integer.parseInt(id)) {
-                        return Response.ok().entity(playlistService.getTracklist()).build();
-                    }
-                } catch (NumberFormatException nfe) {
-                    return Response.status(Response.Status.BAD_REQUEST).build();
-                }
+            try {
+                return Response.ok().entity(playlistService.getAllTracksOfAPlaylist(Integer.parseInt(id))).build();
+            } catch (NumberFormatException nfe) {
+                return Response.status(Response.Status.BAD_REQUEST).build();
             }
-            return Response.status(Response.Status.NO_CONTENT).build();
         } else {
             return Response.status(Response.Status.UNAUTHORIZED).build();
         }

@@ -7,17 +7,18 @@ public class PlaylistService {
 
     List<Playlist> playlists = new ArrayList<>();
     List<Track> tracks = new ArrayList<>();
+    List<Track> tracks2 = new ArrayList<>();
     AllPlayLists allplaylists;
-    Tracks tracklist;
 
 
     public PlaylistService() {
         tracks.add(new Track(1, "Highway to Hell", "AC/DC", 171, 0, "01-01-1979", "Hard rock", false));
         tracks.add(new Track(2, "Let it be", "Beatles", 112, 0, "01-01-1970", "Rock", false));
-        playlists.add(new Playlist(0, "song0", true, tracks));
-        playlists.add(new Playlist(1, "song1", true, null));
+        tracks2.add(new Track(1, "1", "1", 171, 0, "01-01-1979", "Hard rock", false));
+        tracks2.add(new Track(2, "2", "1", 112, 0, "01-01-1970", "Rock", false));
+        playlists.add(new Playlist(0, "playlist0", true, tracks));
+        playlists.add(new Playlist(1, "playlist1", true, tracks2));
         allplaylists = new AllPlayLists(playlists, getAllPlaylistsLength(playlists));
-        tracklist = new Tracks(tracks);
     }
 
     public int getAllPlaylistsLength(List<Playlist> playlists) {
@@ -41,7 +42,12 @@ public class PlaylistService {
         return playlists;
     }
 
-    public Tracks getTracklist() {
-        return tracklist;
+    public Tracks getAllTracksOfAPlaylist(int id) {
+        for (Playlist playlist : playlists) {
+            if (playlist.getId() == id) {
+                return new Tracks(playlist.getTracks());
+            }
+        }
+        return null;
     }
 }
