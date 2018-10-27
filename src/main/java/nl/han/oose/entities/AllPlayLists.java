@@ -1,4 +1,4 @@
-package nl.han.oose.playlists;
+package nl.han.oose.entities;
 
 import java.util.List;
 

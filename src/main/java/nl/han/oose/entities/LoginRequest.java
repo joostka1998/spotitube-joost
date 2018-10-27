@@ -1,4 +1,4 @@
-package nl.han.oose.login;
+package nl.han.oose.entities;
 
 public class LoginRequest {
 

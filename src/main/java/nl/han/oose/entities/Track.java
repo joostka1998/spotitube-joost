@@ -1,4 +1,4 @@
-package nl.han.oose.playlists;
+package nl.han.oose.entities;
 
 public class Track {
     private int id;
