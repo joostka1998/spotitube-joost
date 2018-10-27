@@ -1,6 +1,5 @@
 package nl.han.oose.DAO;
 
-import nl.han.oose.entities.User;
 import nl.han.oose.persistence.ConnectionFactory;
 
 import java.sql.Connection;
@@ -52,22 +51,21 @@ public class UserDAO {
 //        }
 //    }
 
-    public User returnUserIfUserExistsInDB(String username, String password) {
-
-        User user = new User();
+    public boolean login(String username, String password) {
 
         try (
                 Connection connection = connectionFactory.getConnection();
-                PreparedStatement statement = connection.prepareStatement("SELECT Username, Password FROM user WHERE Username = (?) AND Password = (?)");
+                PreparedStatement statement = connection.prepareStatement("SELECT * FROM `user` WHERE Username = ? AND Password = ?");
         ) {
             statement.setString(1, username);
             statement.setString(2, password);
 
             ResultSet resultSet = statement.executeQuery();
-
-            user.setUsername(resultSet.getString("Username"));
-            user.setPassword(resultSet.getString("Password"));
-            return user;
+            if (!resultSet.next()) {
+                return false;
+            } else {
+                return true;
+            }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -76,13 +74,16 @@ public class UserDAO {
     public int getUserID(String username) {
         try (
                 Connection connection = connectionFactory.getConnection();
-                PreparedStatement statement = connection.prepareStatement("SELECT UserID FROM user WHERE Username = ?");
+                PreparedStatement statement = connection.prepareStatement("SELECT UserID FROM `user` WHERE Username = ?");
         ) {
             statement.setString(1, username);
 
             ResultSet resultSet = statement.executeQuery();
-            int id = resultSet.getInt("UserID");
-            return id;
+            if (!resultSet.next()) {
+                return -1;
+            } else {
+                return resultSet.getInt("UserID");
+            }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -96,6 +97,18 @@ public class UserDAO {
             statement.setString(1, String.valueOf(id));
             statement.setString(2, token);
             statement.setString(3, expirationDate);
+            statement.execute();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void removeOldTokenFromDB(int id) {
+        try (
+                Connection connection = connectionFactory.getConnection();
+                PreparedStatement statement = connection.prepareStatement("DELETE FROM token WHERE UserID = (?)");
+        ) {
+            statement.setString(1, String.valueOf(id));
             statement.execute();
         } catch (SQLException e) {
             throw new RuntimeException(e);

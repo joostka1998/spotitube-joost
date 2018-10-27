@@ -24,6 +24,7 @@ public class LoginController {
     public Response loginUser(LoginRequest loginRequest) {
         if (loginService.validateAccount(loginRequest) == true) {
             LoginToken loginToken = loginService.generateLoginToken(loginRequest);
+            loginService.removeOldTokens(loginRequest);
             return Response.ok().entity(loginToken).build();
         } else {
             return Response.status(Response.Status.UNAUTHORIZED).build();
