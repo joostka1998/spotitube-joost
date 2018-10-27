@@ -3,6 +3,7 @@ package nl.han.oose.controllers;
 import nl.han.oose.entities.LoginRequest;
 import nl.han.oose.entities.LoginToken;
 import nl.han.oose.services.LoginService;
+import nl.han.oose.services.TokenService;
 
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
@@ -17,14 +18,15 @@ public class LoginController {
 
     @Inject
     private LoginService loginService;
+    private TokenService tokenService;
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response loginUser(LoginRequest loginRequest) {
         if (loginService.validateAccount(loginRequest) == true) {
-            LoginToken loginToken = loginService.generateLoginToken(loginRequest);
-            loginService.removeOldTokens(loginRequest);
+            tokenService.removeOldTokens(loginRequest);
+            LoginToken loginToken = tokenService.generateLoginToken(loginRequest);
             return Response.ok().entity(loginToken).build();
         } else {
             return Response.status(Response.Status.UNAUTHORIZED).build();

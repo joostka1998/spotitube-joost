@@ -8,10 +8,11 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 @Path("/playlists")
-public class PlaylistsController {
+public class PlaylistController {
 
     @Inject
     PlaylistService playlistService;
+
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
