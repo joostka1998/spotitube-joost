@@ -109,4 +109,17 @@ public class PlaylistDAO {
             throw new RuntimeException(e);
         }
     }
+
+    public void removeTrackFromPlaylistInDB(int playlistID, int trackID) {
+        try (
+                Connection connection = connectionFactory.getConnection();
+                PreparedStatement statement = connection.prepareStatement("DELETE FROM playlisttracks WHERE playlistID = ? AND trackID = ?")
+        ) {
+            statement.setString(1, Integer.toString(playlistID));
+            statement.setString(2, Integer.toString(trackID));
+            statement.execute();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

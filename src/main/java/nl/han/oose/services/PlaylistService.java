@@ -18,7 +18,7 @@ public class PlaylistService {
     @Inject
     private TrackDAO trackObject;
 
-    public int getAllPlaylistsLength(List<Playlist> playlists) {
+    private int getAllPlaylistsLength(List<Playlist> playlists) {
         int totalDuration = 0;
         for (Playlist p : playlists) {
             if (p.getTracks() != null) {
@@ -64,5 +64,17 @@ public class PlaylistService {
 
     public void changeName(Playlist playlist) {
         playlistObject.changePlaylistName(playlist.getId(), playlist.getName());
+    }
+
+    public List<Track> getAllTracksOfAPlaylist(int playlistID) {
+        return trackObject.getAllTracksOfAPlaylistFromDB(playlistID);
+    }
+
+    public void removeTrackFromPlaylist(int playlistID, int trackID) {
+        playlistObject.removeTrackFromPlaylistInDB(playlistID, trackID);
+    }
+
+    public List<Track> returnTracksOfPlaylist(int playlistID) {
+        return trackObject.getAllTracksOfAPlaylistFromDB(playlistID);
     }
 }
