@@ -1,5 +1,6 @@
 package nl.han.oose.controllers;
 
+import nl.han.oose.entities.Playlist;
 import nl.han.oose.services.PlaylistService;
 import nl.han.oose.services.TokenService;
 
@@ -42,6 +43,33 @@ public class PlaylistController {
             return Response.status(Response.Status.BAD_REQUEST).build();
         }
     }
+
+    @Path("")
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response addPlaylist(Playlist playlist, @QueryParam("token") String token) {
+        if (tokenService.isValidToken(token)) {
+            playlistService.addPlaylist(playlist);
+            return Response.ok().entity(playlistService.returnAllPlayListsWithTotalLength()).build();
+        } else {
+            return Response.status(Response.Status.BAD_REQUEST).build();
+        }
+    }
+
+    @Path("/{id}")
+    @PUT
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response setPlaylistName(Playlist playlist, @QueryParam("token") String token) {
+        if (tokenService.isValidToken(token)) {
+            playlistService.changeName(playlist);
+            return Response.ok().entity(playlistService.returnAllPlayListsWithTotalLength()).build();
+        } else {
+            return Response.status(Response.Status.BAD_REQUEST).build();
+        }
+    }
+
 
 //    @Path("/{id}/tracks")
 //    @GET

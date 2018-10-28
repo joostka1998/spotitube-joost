@@ -1,5 +1,6 @@
 package nl.han.oose.DAO;
 
+import nl.han.oose.entities.Playlist;
 import nl.han.oose.persistence.ConnectionFactory;
 
 import java.sql.Connection;
@@ -83,4 +84,29 @@ public class PlaylistDAO {
         }
     }
 
+    public void persistPlaylist(Playlist playlist) {
+        try (
+                Connection connection = connectionFactory.getConnection();
+                PreparedStatement statement = connection.prepareStatement("INSERT INTO playlist (`Name`, Owner) VALUES (?, ?)")
+        ) {
+            statement.setString(1, playlist.getName());
+            statement.setString(2, String.valueOf(playlist.isOwner()));
+            statement.execute();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void changePlaylistName(int id, String name) {
+        try (
+                Connection connection = connectionFactory.getConnection();
+                PreparedStatement statement = connection.prepareStatement("UPDATE playlist SET `Name` = ? WHERE playlistID = ?")
+        ) {
+            statement.setString(1, name);
+            statement.setString(2, String.valueOf(id));
+            statement.execute();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

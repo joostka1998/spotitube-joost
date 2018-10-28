@@ -58,4 +58,11 @@ public class PlaylistService {
     }
 
 
+    public void addPlaylist(Playlist playlist) {
+        playlistObject.persistPlaylist(playlist);
+    }
+
+    public void changeName(Playlist playlist) {
+        playlistObject.changePlaylistName(playlist.getId(), playlist.getName());
+    }
 }
