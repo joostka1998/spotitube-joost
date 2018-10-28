@@ -5,6 +5,7 @@ public class Track {
     private String title;
     private String performer;
     private int duration;
+    private String album;
     private int playcount;
     private String publicationdate;
     private String description;
@@ -13,11 +14,12 @@ public class Track {
     public Track() {
     }
 
-    public Track(int id, String title, String performer, int duration, int playcount, String publicationdate, String description, boolean offlineAvailible) {
+    public Track(int id, String title, String performer, int duration, String album, int playcount, String publicationdate, String description, boolean offlineAvailible) {
         this.id = id;
         this.title = title;
         this.performer = performer;
         this.duration = duration;
+        this.album = album;
         this.playcount = playcount;
         this.publicationdate = publicationdate;
         this.description = description;
@@ -86,5 +88,13 @@ public class Track {
 
     public void setOfflineAvailible(boolean offlineAvailible) {
         this.offlineAvailible = offlineAvailible;
+    }
+
+    public String getAlbum() {
+        return album;
+    }
+
+    public void setAlbum(String album) {
+        this.album = album;
     }
 }

@@ -18,6 +18,8 @@ public class LoginController {
 
     @Inject
     private LoginService loginService;
+
+    @Inject
     private TokenService tokenService;
 
     @POST

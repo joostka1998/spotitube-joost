@@ -53,4 +53,14 @@ public class TokenService {
 
         tokenObject.removeOldTokenFromDB(id);
     }
+
+    public boolean isValidToken(String token) {
+        boolean doesTokenExist = tokenObject.isTokenInDB(token);
+
+        if (doesTokenExist) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 }
