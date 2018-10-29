@@ -77,4 +77,8 @@ public class PlaylistService {
     public List<Track> returnTracksOfPlaylist(int playlistID) {
         return trackObject.getAllTracksOfAPlaylistFromDB(playlistID);
     }
+
+    public void addTracktoPlaylist(int playlistId, Track track) {
+        playlistObject.persistTrackinPlaylisttracks(playlistId, track.getId());
+    }
 }

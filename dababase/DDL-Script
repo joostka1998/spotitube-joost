@@ -1,0 +1,71 @@
+
+create database spotitube
+-- genereert niet uit zichzelf
+
+
+
+create table playlist
+(
+	playlistID int auto_increment
+		primary key,
+	Name varchar(255) not null,
+	Owner tinyint(1) not null
+)
+;
+
+create table track
+(
+	ID int auto_increment
+		primary key,
+	Title varchar(255) not null,
+	Performer varchar(255) not null,
+	Duration int not null,
+	Album varchar(255) null,
+	Play_Count int null,
+	Publication_Date datetime null,
+	Description varchar(255) null,
+	Offline_Availible tinyint(1) null
+)
+;
+
+create table playlisttracks
+(
+	playlistID int not null,
+	trackID int not null,
+	constraint FK_playlisttracks_to_playlist
+		foreign key (playlistID) references playlist (playlistid),
+	constraint FK_playlisttracks_to_track
+		foreign key (trackID) references track (id)
+)
+;
+
+create index FK_playlisttracks_to_playlist
+	on playlisttracks (playlistID)
+;
+
+create index FK_playlisttracks_to_track
+	on playlisttracks (trackID)
+;
+
+create table user
+(
+	UserID int auto_increment
+		primary key,
+	Username varchar(20) not null,
+	Password varchar(20) not null,
+	constraint Username
+		unique (Username)
+)
+;
+
+create table token
+(
+	UserID int not null,
+	Token varchar(14) not null,
+	Expiration_Date datetime not null,
+	primary key (UserID, Token, Expiration_Date),
+	constraint FK_token_to_User
+		foreign key (UserID) references user (userid)
+)
+;
+

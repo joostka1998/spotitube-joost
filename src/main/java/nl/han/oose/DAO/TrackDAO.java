@@ -147,7 +147,7 @@ public class TrackDAO {
                 Connection connection = connectionFactory.getConnection();
                 PreparedStatement statement = connection.prepareStatement("UPDATE track SET Offline_Availible = ? WHERE ID = ?")
         ) {
-            statement.setString(1, Boolean.toString(offlineAvailible));
+            statement.setBoolean(1, offlineAvailible);
             statement.setString(2, Integer.toString(id));
             statement.execute();
         } catch (SQLException e) {

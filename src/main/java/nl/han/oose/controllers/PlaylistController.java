@@ -2,6 +2,7 @@ package nl.han.oose.controllers;
 
 import nl.han.oose.entities.Playlist;
 import nl.han.oose.entities.Track;
+import nl.han.oose.entities.Tracks;
 import nl.han.oose.services.PlaylistService;
 import nl.han.oose.services.TokenService;
 import nl.han.oose.services.TrackService;
@@ -29,7 +30,7 @@ public class PlaylistController {
         if (tokenService.isValidToken(token)) {
             return Response.ok().entity(playlistService.returnAllPlayListsWithTotalLength()).build();
         } else {
-            return Response.status(Response.Status.BAD_REQUEST).build();
+            return Response.status(Response.Status.FORBIDDEN).build();
         }
     }
 
@@ -45,7 +46,7 @@ public class PlaylistController {
                 return Response.status(Response.Status.BAD_REQUEST).build();
             }
         } else {
-            return Response.status(Response.Status.BAD_REQUEST).build();
+            return Response.status(Response.Status.FORBIDDEN).build();
         }
     }
 
@@ -58,7 +59,7 @@ public class PlaylistController {
             playlistService.addPlaylist(playlist);
             return Response.ok().entity(playlistService.returnAllPlayListsWithTotalLength()).build();
         } else {
-            return Response.status(Response.Status.BAD_REQUEST).build();
+            return Response.status(Response.Status.FORBIDDEN).build();
         }
     }
 
@@ -71,7 +72,7 @@ public class PlaylistController {
             playlistService.changeName(playlist);
             return Response.ok().entity(playlistService.returnAllPlayListsWithTotalLength()).build();
         } else {
-            return Response.status(Response.Status.BAD_REQUEST).build();
+            return Response.status(Response.Status.FORBIDDEN).build();
         }
     }
 
@@ -82,45 +83,49 @@ public class PlaylistController {
     public Response getPlaylist(@PathParam("id") final String playlistId, @QueryParam("token") String token) {
         if (tokenService.isValidToken(token)) {
             try {
-                return Response.ok().entity(playlistService.returnTracksOfPlaylist(Integer.parseInt(playlistId))).build();
+                Tracks tracks = new Tracks(playlistService.returnTracksOfPlaylist(Integer.parseInt(playlistId)));
+                return Response.ok().entity(tracks).build();
             } catch (NumberFormatException nfe) {
                 return Response.status(Response.Status.BAD_REQUEST).build();
             }
         } else {
-            return Response.status(Response.Status.BAD_REQUEST).build();
+            return Response.status(Response.Status.FORBIDDEN).build();
         }
     }
 
-    @Path("/playlists/{pid}/tracks/{tid}")
+    @Path("/{pid}/tracks/{tid}")
     @DELETE
     @Produces(MediaType.APPLICATION_JSON)
     public Response deleteTrackFromPlaylist(@PathParam("pid") final String playlistId, @PathParam("tid") final String trackId, @QueryParam("token") String token) {
         if (tokenService.isValidToken(token)) {
             try {
                 playlistService.removeTrackFromPlaylist(Integer.parseInt(playlistId), Integer.parseInt(trackId));
-                return Response.ok().entity(playlistService.returnTracksOfPlaylist(Integer.parseInt(playlistId))).build();
+                Tracks tracks = new Tracks(playlistService.returnTracksOfPlaylist(Integer.parseInt(playlistId)));
+                return Response.ok().entity(tracks).build();
             } catch (NumberFormatException nfe) {
                 return Response.status(Response.Status.BAD_REQUEST).build();
             }
         } else {
-            return Response.status(Response.Status.BAD_REQUEST).build();
+            return Response.status(Response.Status.FORBIDDEN).build();
         }
     }
 
-    @Path("/playlists/{id}/tracks")
+    @Path("/{id}/tracks")
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response addTrackToPlaylist(Track track, @QueryParam("token") String token, @PathParam("id") final String playlistId) {
         if (tokenService.isValidToken(token)) {
             try {
-                trackService.setOfflineAvailible(track.getId(), track.isOfflineAvailible());
-                return Response.ok().entity(playlistService.returnTracksOfPlaylist(Integer.parseInt(playlistId))).build();
+                trackService.setOfflineAvailible(track.getId(), Boolean.valueOf(track.isOfflineAvailible()));
+                playlistService.addTracktoPlaylist(Integer.parseInt(playlistId), track);
+                Tracks tracks = new Tracks(playlistService.returnTracksOfPlaylist(Integer.parseInt(playlistId)));
+                return Response.ok().entity(tracks).build();
             } catch (NumberFormatException nfe) {
                 return Response.status(Response.Status.BAD_REQUEST).build();
             }
         } else {
-            return Response.status(Response.Status.BAD_REQUEST).build();
+            return Response.status(Response.Status.FORBIDDEN).build();
         }
     }
 

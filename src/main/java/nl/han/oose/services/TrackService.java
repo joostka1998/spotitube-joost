@@ -17,6 +17,7 @@ public class TrackService {
     }
 
     public void setOfflineAvailible(int id, boolean offlineAvailible) {
+        System.out.println(offlineAvailible);
         if (trackObject.getTrack(id).isOfflineAvailible() != offlineAvailible) {
             trackObject.setTrackAvailible(id, offlineAvailible);
         }

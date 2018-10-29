@@ -90,7 +90,7 @@ public class PlaylistDAO {
                 PreparedStatement statement = connection.prepareStatement("INSERT INTO playlist (`Name`, Owner) VALUES (?, ?)")
         ) {
             statement.setString(1, playlist.getName());
-            statement.setString(2, String.valueOf(playlist.isOwner()));
+            statement.setBoolean(2, Boolean.valueOf(playlist.isOwner()));
             statement.execute();
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -117,6 +117,19 @@ public class PlaylistDAO {
         ) {
             statement.setString(1, Integer.toString(playlistID));
             statement.setString(2, Integer.toString(trackID));
+            statement.execute();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void persistTrackinPlaylisttracks(int playlistId, int trackId) {
+        try (
+                Connection connection = connectionFactory.getConnection();
+                PreparedStatement statement = connection.prepareStatement("INSERT INTO playlisttracks (playlistID, trackID) VALUES (?, ?)")
+        ) {
+            statement.setString(1, Integer.toString(playlistId));
+            statement.setString(2, Integer.toString(trackId));
             statement.execute();
         } catch (SQLException e) {
             throw new RuntimeException(e);

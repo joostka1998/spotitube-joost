@@ -1,6 +1,7 @@
 package nl.han.oose.controllers;
 
 
+import nl.han.oose.entities.Tracks;
 import nl.han.oose.services.TokenService;
 import nl.han.oose.services.TrackService;
 
@@ -21,17 +22,19 @@ public class TrackController {
     @Inject
     private TokenService tokenService;
 
+    @Path("")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response getAllTracks(@QueryParam("token") String token, @QueryParam("forPlaylist") String playlistID) {
         if (tokenService.isValidToken(token)) {
             try {
-                return Response.ok().entity(trackService.getAllTracksNotInPlaylist(Integer.parseInt(playlistID))).build();
+                Tracks tracks = new Tracks(trackService.getAllTracksNotInPlaylist(Integer.parseInt(playlistID)));
+                return Response.ok().entity(tracks).build();
             } catch (NumberFormatException nfe) {
                 return Response.status(Response.Status.BAD_REQUEST).build();
             }
         } else {
-            return Response.status(Response.Status.BAD_REQUEST).build();
+            return Response.status(Response.Status.FORBIDDEN).build();
         }
     }
 }
